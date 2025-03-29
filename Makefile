@@ -2,14 +2,14 @@ CC = clang
 CFLAGS = -Wall -Wextra -std=c17 -g -I./include \
          -I./sysheaders -I./src 
 
-SRC = main.c
+SRC = main.c src/framebuffer.c src/render.c
 OBJ = $(SRC:.c=.o)
 TARGET = my_program
 
 all: $(TARGET)
 
-$(OBJ): $(SRC)
-	$(CC) $(CFLAGS) -c $(SRC) -o $(OBJ)
+$(OBJ): %.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(TARGET)
