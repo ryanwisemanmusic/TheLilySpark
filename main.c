@@ -2,11 +2,14 @@
 #include "mach_lib.h"
 #include "net_lib.h"
 #include "syscall.h"
-
-
+#include "framebuffer.h"
+#include "render.h"
 
 int main()
 {
+    Framebuffer* fb = fb_create(640, 480);
+    Pixel red = {255, 0, 0};
+    Pixel black = {0, 0, 0};
     int kq = kqueue();
     if (kq == -1)
     {
@@ -36,7 +39,14 @@ int main()
             {
                 buffer[n] = '\0';
                 printf("Input received: %s\n", buffer);
-                if (buffer[0] == 'q')
+                if (buffer[0] == 'd')
+                {
+                    render_clear(fb, black);
+                    render_rect(fb, 100, 100, 50, 50, red);
+                    fb_save_ppm(fb, "output.ppm");
+                    printf("Framebuffer saved to output.ppm\n");
+                }
+                else if (buffer[0] == 'q')
                 {
                     printf("Exiting program...\n");
                     break;
@@ -44,6 +54,7 @@ int main()
             }
         }
     }
+    fb_destroy(fb);
     close(kq);
     return 0;
 }
