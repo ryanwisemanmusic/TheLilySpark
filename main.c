@@ -4,6 +4,7 @@
 #include "syscall.h"
 #include "framebuffer.h"
 #include "render.h"
+#include "armOpCodes.h"
 
 // Global variables using your original naming
 static Framebuffer* fb = NULL;
