@@ -34,7 +34,6 @@ int init_system(void)
     return 0;
 }
 
-// Process a single input event
 int process_input(void)
 {
     int nev = kevent(kq, &change, 1, &event, 1, NULL);
@@ -59,15 +58,14 @@ int process_input(void)
             }
             else if (buffer[0] == 'q') {
                 printf("Exiting program...\n");
-                return 1; // Signal to quit
+                return 1; 
             }
         }
     }
     
-    return 0; // Continue processing
+    return 0;
 }
 
-// Cleanup resources
 void cleanup_system(void)
 {
     if (fb) {
@@ -92,7 +90,7 @@ int main(void)
     while (!quit) {
         quit = process_input();
         if (quit < 0) {
-            break; // Error occurred
+            break;
         }
     }
     
