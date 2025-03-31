@@ -17,6 +17,16 @@ unsigned agx_instr_bytes(uint8_t opc, uint8_t reg)
         return agx_opcode_table[opc].size ?: 2;
 }
 
+
+/*
+Odd things to note, for whatever reason, s.type going to 0 eventually
+creates a problem where s.type is out of range????????
+
+Okay??? I don't know how it's getting upset that we are beyond scope, but
+every time we pry into of what went beyond scope, it's that s.type is 0??????
+
+Like literally what the fuck? So it skips over
+*/
 void agx_print_src(FILE *fp, struct agx_src s)
 {
     const char *types[] = { "#", "unk1:", "const_", "" };
@@ -26,6 +36,28 @@ void agx_print_src(FILE *fp, struct agx_src s)
                     s.abs ? ".abs" : "", s.neg ? ".neg" : "", 
                     s.unk ? ".unk" : "" );
 
+    if (s.type == 0)
+    {
+        fprintf(fp, " // s.type = 0: this is an immediate value\n");
+    }
+    if (s.type == 1)
+    {
+        fprintf(fp, " // Value is UNKNOWN. s.type == 1\n");
+    }
+    if (s.type == 2)
+    {
+        fprintf(fp, " // s.type set to 2: this is ONLY valid\n");
+    }
+    if (s.type == 3)
+    {
+        fprintf(fp, " // s.type set to 3: empty string (register?)\n");
+    }
+    if (!s.type)
+    {
+        fprintf(fp, " // CRITICAL FAILURE WITH SOURCE TYPE. S.TYPE BEYOND SCOPE\n");
+        printf("Our value of !s.type is %d\n", !s.type);
+        printf("\n");
+    }
 }
 
 void agx_print_float_src(
@@ -45,25 +77,32 @@ struct agx_src agx_decode_float_src(uint16_t packed)
 {
     return (struct agx_src) 
     {
-        .reg = (packed & 0x3F),
-        .type = (packed & 0xC0) >> 6,
-        .unk = (packed & 0x100),
-        .size32 = (packed & 0x200),
-        .abs = (packed & 0x400),
-        .neg = (packed & 0x800),
+        .reg = (packed >> 4) & 0x3F,
+        .type = (packed >> 10) >> 0x3,
+        .unk = (packed & 0x1),
+        .size32 = (packed & 0x8),
+        .abs = (packed & 0x4),
+        .neg = (packed & 0x2),
     };
 }
 
 void agx_print_fadd_f32(FILE *fp, uint8_t *code)
 {
-    agx_print_src(fp, agx_decode_float_src(code[2] | ((code[3] & 0xF) << 8)));
-    printf("\n");
-    agx_print_src(fp, agx_decode_float_src((code[3] >> 4) | (code[4] << 4)));
-    printf("\n");
+    //Code pertaining to source 0
+    //We want to do the packing of data first
+    uint16_t src0_packed = (code[2] << 4) | (code[3] >> 4);
+    //then print the decoded float result of src0_pacled
+    agx_print_src(fp, agx_decode_float_src(src0_packed));
+
+    //Code pertaining to source 1
+    //We package this data in a few bounds, so we may need to tweak this
+    //As we hunt for the M2 specific memory locations
+    uint16_t src1_packed = ((code[3] & 0xF) << 8) | code[4];
+    //Print then what is in src1_packed
+    agx_print_src(fp, agx_decode_float_src(src1_packed));
 
     if (code[5])
         fprintf(fp, " /* unk5 = %02X */", code[5]);
-        printf("\n");
 }
 
 void agx_print_ld_compute(uint8_t *code, FILE *fp)
@@ -78,16 +117,16 @@ void agx_print_ld_compute(uint8_t *code, FILE *fp)
     switch (selector)
     {
         case 0x0c:
-        fprintf(fp, "[thread_position_in_threadgroup]");
+        fprintf(fp, "[thread_position_in_threadgroup]\n");
             break;
         case 0x00:
-        fprintf(fp, "[threadgroup_position_in_grid]");
+        fprintf(fp, "[threadgroup_position_in_grid]\n");
             break;
         case 0x0d:
-            fprintf(fp, "[thread_position_in_simdgroup]");
+            fprintf(fp, "[thread_position_in_simdgroup]\n");
             break;
         case 0x104:
-            fprintf(fp, "[thread_position_in_grid]");
+            fprintf(fp, "[thread_position_in_grid]\n");
             break;
         default:
             fprintf(fp, "[unk_%X]", selector);
@@ -150,7 +189,7 @@ unsigned agx_disassemble_instr(
     }
 
     uint8_t dest = code[1];
-    bool dest_32 = dest & 0x1;
+    bool dest_32 = (opc == OPC_FADD_32 || opc == OPC_FADD_SAT_32) ? true : (dest & 0x1);
     unsigned dest_reg = (dest >> 1) & 0x3F;
 
     fprintf(fp, " %s%u", 

@@ -15,11 +15,26 @@ static Pixel red = {255, 0, 0};
 static Pixel black = {0, 0, 0};
 
 //Testing our buffer into Apple Hardware
+
+/*
+    This is the true test of whether or not we have successfully worked
+    with said registers. These values are the stuff we need, or else
+    we cannot get the GPU to do math for us at whim.
+
+    Any problems here are essential if we want to access the GPU directly.
+*/
 uint8_t test_code[16] = 
 {
-    0xAA, 0x80, 0x23, 0x24, 0x35, 0x00,
-    0x96, 0x02, 0x45, 0x36, 0x27, 0x00, 
-    0x00, 0x80, 0x00, 0x00 
+    0xAA, 0x81, // We begin with Opcode at 0xAA. Then we add dest (w0) to it
+    //On source 0, we need us to store a constant at value 5
+    0x50, 0xA0, //Source 0: type=2 (const_), reg=5, flags=0
+    //On source 1, we need us to store a constant at value 10
+    0x0A, 0x00, //Source 1: type=2 (const_), reg=10, flags=0
+    0x96, 0x02, 
+    0x45, 0x36, 
+    0x27, 0x00, 
+    0x00, 0x80, 
+    0x00, 0x00 
 };
 
 // Initialize the framebuffer and event queue
