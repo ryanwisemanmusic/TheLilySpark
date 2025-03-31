@@ -51,7 +51,7 @@ enum agx_opcodes
     //Another problem area that we need to check
     OPC_LD_THREADS_PER_GRID = 0x7E,
     OPC_UNK38 = 0x38, 
-    OPC_STOP = 0x00,
+    OPC_STOP = 0x08,
 
     OPC_LD_VAR_NO_PERSPECTIVE = 0xA1,
     OPC_LD_VAR = 0xE1,
@@ -88,7 +88,7 @@ agx_opcode_table[256] =
     [OPC_FADD_SAT_32] = { "fadd.sat.32", 6, C },
     [OPC_FMUL_32] = { "fmul.32", 6, C },
     [OPC_FMUL_SAT_32] = { "fmul.sat.32", 6, C },
-    [OPC_FFMA_32] = { "ffma..32", 8, I },
+    [OPC_FFMA_32] = { "ffma.32", 8, I },
     [OPC_FFMA_SAT_32] = { "ffma.sat.32", 8, I },
     [OPC_FFMA_CMPCT_32] = { "ffma.cmpct.32", 6, I },
     [OPC_FFMA_CMPCT_SAT_32] = { "ffma.cmpct.sat.32", 6, I },
@@ -116,7 +116,7 @@ agx_opcode_table[256] =
     [OPC_UNK48] = { "unk48", 4, I },
     [OPC_UNK42] = { "unk42", 6, I},
     [OPC_UNK52] = { "unk52", 6, I},
-    [OPC_UNKD2] = { "unkd2", 12, I},
+    [OPC_UNKD2] = { "unkD2", 12, I},
 };
 
 #undef I

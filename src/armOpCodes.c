@@ -57,10 +57,13 @@ struct agx_src agx_decode_float_src(uint16_t packed)
 void agx_print_fadd_f32(FILE *fp, uint8_t *code)
 {
     agx_print_src(fp, agx_decode_float_src(code[2] | ((code[3] & 0xF) << 8)));
+    printf("\n");
     agx_print_src(fp, agx_decode_float_src((code[3] >> 4) | (code[4] << 4)));
+    printf("\n");
 
     if (code[5])
         fprintf(fp, " /* unk5 = %02X */", code[5]);
+        printf("\n");
 }
 
 void agx_print_ld_compute(uint8_t *code, FILE *fp)
@@ -74,11 +77,11 @@ void agx_print_ld_compute(uint8_t *code, FILE *fp)
 
     switch (selector)
     {
-        case 0x00:
-            fprintf(fp, "[threadgroun_position_in_grid]");
-            break;
         case 0x0c:
-            fprintf(fp, "[threadgroup_position_in_threadgroup]");
+        fprintf(fp, "[thread_position_in_threadgroup]");
+            break;
+        case 0x00:
+        fprintf(fp, "[threadgroup_position_in_grid]");
             break;
         case 0x0d:
             fprintf(fp, "[thread_position_in_simdgroup]");

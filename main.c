@@ -17,8 +17,8 @@ static Pixel black = {0, 0, 0};
 //Testing our buffer into Apple Hardware
 uint8_t test_code[16] = 
 {
-    0xAA, 0x00, 0x20, 0x30, 0x40, 0x50,
-    0x96, 0x00, 0x10, 0x20, 0x30, 0x40, 
+    0xAA, 0x80, 0x23, 0x24, 0x35, 0x00,
+    0x96, 0x02, 0x45, 0x36, 0x27, 0x00, 
     0x00, 0x80, 0x00, 0x00 
 };
 
@@ -70,7 +70,13 @@ int process_input(void)
             else if (buffer[0] == 'a')
             {
                 printf("Here are some relevant options:\n");
-                printf("a - Runs agx_disassemble\n");
+                printf("a - Runs agx_disassemble_instr\n");
+                printf("b - Runs agx_print_fadd_f32\n");
+                printf("c - Runs agx_print_ld_compute\n");
+                printf("d - Runs agx_print_src\n");
+                printf("e - Runs agx_print_float_src\n");
+                printf("f - Runs agx_instr_bytes\n");
+                printf("z - Runs agx_disassemble\n");
                 printf("Enter option: \n");
 
                 char suboption[128];
@@ -80,11 +86,71 @@ int process_input(void)
                 {
                     suboption[m] = '\0';
                     
+                    /*
+                    There are so many issues with this code in particular,
+                    but that has more to do with making sure I am doing stuff correctly.
 
+                    This is an entirely new territory, so it's a lot of work to
+                    find out exactly how to communicate with the OS. It's also
+                    a lot of fun to brainstorm these fixes.
+
+                    The important part here is that these run the commands I've setup
+                    in my OpCode files. They all execute, meaning I can begin
+                    to diagnose some of the problems when working with these
+                    */
                     if (suboption[0] == 'a')
+                    {
+                        bool stop = false;
+                        printf("Testing one instruction\n");
+                        agx_disassemble_instr(test_code, &stop, true, stdout);
+                        printf("\n");
+                    }
+
+                    if (suboption[0] == 'b')
+                    {
+                        printf("Testing floating point addition\n");
+                        agx_print_fadd_f32(stdout, test_code);
+                        printf("\n");
+                    }
+                    if (suboption[0] == 'c')
+                    {
+                        printf("Testing M2's ARM load compute");
+                        agx_print_ld_compute(test_code, stdout);
+                        printf("\n");
+                    }
+                    if (suboption[0] == 'd')
+                    {
+                        printf("Testing source printing\n");
+                        struct agx_src test_src = 
+                            {
+                                .type = 0,
+                                .reg = 42,
+                                .size32 = true,
+                                .abs = false,
+                                .neg = false,
+                                .unk = 0
+                            };
+                        agx_print_src(stdout, test_src);
+                        printf("\n");
+                    }
+                    if (suboption[0] == 'e')
+                    {
+                        printf("Testing floating point source printing\n");
+                        agx_print_float_src(stdout, 0, 42, true, false, false);
+                        printf("\n");
+                    }
+                    if (suboption[0] == 'f')
+                    {
+                        printf("Testing instruction byte length\n");
+                        agx_instr_bytes(0, 42);
+                        printf("\n");
+                    }
+
+                    if (suboption[0] == 'z')
                     {
                         printf("Disassembly of test code: \n");
                         agx_disassemble(test_code, sizeof(test_code), stdout);
+                        printf("\n");
                     }
                 }
                 
