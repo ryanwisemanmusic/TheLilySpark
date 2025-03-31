@@ -1,10 +1,10 @@
 //Credit to Alyssa Rosenzweig
 
 #include <stdio.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <assert.h>
+ #include <stdint.h>
+ #include <stdbool.h>
+ #include <stdlib.h>
+ #include <assert.h>
 
 
 
@@ -139,3 +139,40 @@ struct agx_src {
     bool neg;
     unsigned unk;
 };
+
+static void agx_print_src(FILE *fp, struct agx_src s)
+{
+    const char *types[] = { "#", "unk1:", "const_", "" };
+
+    fprintf(fp, ", %s%s%u%s%s%s", s.size32 ? "w": "h",
+                    types[s.type], s.reg, 
+                    s.abs ? ".abs" : "", s.neg ? ".neg" : "", 
+                    s.unk ? ".unk" : "" );
+
+}
+
+static void agx_print_float_src(
+    FILE *fp, unsigned type, unsigned reg, 
+    bool size32, bool abs, bool neg)
+{
+    assert (type <= 3);
+    agx_print_src(fp, (struct agx_src) 
+    {
+        .type = type, .reg = reg, .size32 = size32, 
+        .abs = abs, .neg = neg
+    }
+                 );
+}
+
+static struct agx_src agx_decode_float_src(uint16_t packed)
+{
+    return (struct agx_src) 
+    {
+        .reg = (packed & 0x3F),
+        .type = (packed & 0xC0) >> 6,
+        .unk = (packed & 0x100),
+        .size32 = (packed & 0x200),
+        .abs = (packed & 0x400),
+        .neg = (packed & 0x800),
+    };
+}
