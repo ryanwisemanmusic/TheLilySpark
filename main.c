@@ -14,6 +14,14 @@ static struct kevent event;
 static Pixel red = {255, 0, 0};
 static Pixel black = {0, 0, 0};
 
+//Testing our buffer into Apple Hardware
+uint8_t test_code[16] = 
+{
+    0xAA, 0x00, 0x20, 0x30, 0x40, 0x50,
+    0x96, 0x00, 0x10, 0x20, 0x30, 0x40, 
+    0x00, 0x80, 0x00, 0x00 
+};
+
 // Initialize the framebuffer and event queue
 int init_system(void)
 {
@@ -43,11 +51,13 @@ int process_input(void)
         return -1;
     }
     
-    if (nev > 0 && event.filter == EVFILT_READ) {
+    if (nev > 0 && event.filter == EVFILT_READ) 
+    {
         char buffer[128];
         int n = read(STDIN_FILENO, buffer, sizeof(buffer) - 1);
         
-        if (n > 0) {
+        if (n > 0) 
+        {
             buffer[n] = '\0';
             printf("Input received: %s\n", buffer);
             
@@ -56,6 +66,28 @@ int process_input(void)
                 render_rect(fb, 100, 100, 50, 50, red);
                 fb_save_ppm(fb, "output.ppm");
                 printf("Framebuffer saved to output.ppm\n");
+            }
+            else if (buffer[0] == 'a')
+            {
+                printf("Here are some relevant options:\n");
+                printf("a - Runs agx_disassemble\n");
+                printf("Enter option: \n");
+
+                char suboption[128];
+                int m = read(STDIN_FILENO, suboption, sizeof(suboption) - 1);
+
+                if (m > 0)
+                {
+                    suboption[m] = '\0';
+                    
+
+                    if (suboption[0] == 'a')
+                    {
+                        printf("Disassembly of test code: \n");
+                        agx_disassemble(test_code, sizeof(test_code), stdout);
+                    }
+                }
+                
             }
             else if (buffer[0] == 'q') {
                 printf("Exiting program...\n");
