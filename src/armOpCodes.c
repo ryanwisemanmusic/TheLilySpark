@@ -36,6 +36,7 @@ void agx_print_src(FILE *fp, struct agx_src s)
                     s.abs ? ".abs" : "", s.neg ? ".neg" : "", 
                     s.unk ? ".unk" : "" );
 
+    // Debug information about the source type
     if (s.type == 0)
     {
         fprintf(fp, " // s.type = 0: this is an immediate value\n");
@@ -52,11 +53,10 @@ void agx_print_src(FILE *fp, struct agx_src s)
     {
         fprintf(fp, " // s.type set to 3: empty string (register?)\n");
     }
-    if (!s.type)
+    if (s.type > 3 && s.type < 100)
     {
         fprintf(fp, " // CRITICAL FAILURE WITH SOURCE TYPE. S.TYPE BEYOND SCOPE\n");
-        printf("Our value of !s.type is %d\n", !s.type);
-        printf("\n");
+        printf("Our value of s.type is %d\n", s.type);
     }
 }
 
@@ -77,29 +77,47 @@ struct agx_src agx_decode_float_src(uint16_t packed)
 {
     return (struct agx_src) 
     {
+        //Bits 4-9 (6 bits)
         .reg = (packed >> 4) & 0x3F,
-        .type = (packed >> 10) >> 0x3,
-        .unk = (packed & 0x1),
+        //Bits 10-11 (2 bits)
+        .type = (packed >> 10) & 0x3,
+        //Bit 3
         .size32 = (packed & 0x8),
+        //Bit 2
         .abs = (packed & 0x4),
+        //Bit 1
         .neg = (packed & 0x2),
+        //Bit 0
+        .unk = (packed & 0x1),
+        
     };
 }
 
 void agx_print_fadd_f32(FILE *fp, uint8_t *code)
 {
+    //Debug the raw bytes being processed
+    fprintf(fp, "// Raw bytes: %02X %02X %02X %02X %02X %02X\n", 
+            code[0], code[1], code[2], code[3], code[4], code[5]);
+    
     //Code pertaining to source 0
-    //We want to do the packing of data first
     uint16_t src0_packed = (code[2] << 4) | (code[3] >> 4);
-    //then print the decoded float result of src0_pacled
-    agx_print_src(fp, agx_decode_float_src(src0_packed));
+    fprintf(fp, "// src0_packed: 0x%04X\n", src0_packed);
+    
+    //then print the decoded float result of src0_packed
+    struct agx_src src0 = agx_decode_float_src(src0_packed);
+    fprintf(fp, "// src0 decoded: type=%u, reg=%u, size32=%d, abs=%d, neg=%d, unk=%u\n",
+            src0.type, src0.reg, src0.size32, src0.abs, src0.neg, src0.unk);
+    agx_print_src(fp, src0);
 
     //Code pertaining to source 1
-    //We package this data in a few bounds, so we may need to tweak this
-    //As we hunt for the M2 specific memory locations
     uint16_t src1_packed = ((code[3] & 0xF) << 8) | code[4];
+    fprintf(fp, "// src1_packed: 0x%04X\n", src1_packed);
+    
     //Print then what is in src1_packed
-    agx_print_src(fp, agx_decode_float_src(src1_packed));
+    struct agx_src src1 = agx_decode_float_src(src1_packed);
+    fprintf(fp, "// src1 decoded: type=%u, reg=%u, size32=%d, abs=%d, neg=%d, unk=%u\n",
+            src1.type, src1.reg, src1.size32, src1.abs, src1.neg, src1.unk);
+    agx_print_src(fp, src1);
 
     if (code[5])
         fprintf(fp, " /* unk5 = %02X */", code[5]);
