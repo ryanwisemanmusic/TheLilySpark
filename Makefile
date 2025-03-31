@@ -2,7 +2,7 @@ CC = clang
 CFLAGS = -Wall -Wextra -std=c17 -g -I./include \
          -I./sysheaders -I./src 
 
-SRC = main.c src/framebuffer.c src/render.c
+SRC = main.c src/framebuffer.c src/render.c src/armOpCodes.c
 OBJ = $(SRC:.c=.o)
 TARGET = my_program
 
