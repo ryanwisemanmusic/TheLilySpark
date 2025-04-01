@@ -25,7 +25,7 @@ creates a problem where s.type is out of range????????
 Okay??? I don't know how it's getting upset that we are beyond scope, but
 every time we pry into of what went beyond scope, it's that s.type is 0??????
 
-Like literally what the fuck? So it skips over
+Like literally what the fuck???????
 */
 void agx_print_src(FILE *fp, struct agx_src s)
 {
@@ -36,7 +36,7 @@ void agx_print_src(FILE *fp, struct agx_src s)
                     s.abs ? ".abs" : "", s.neg ? ".neg" : "", 
                     s.unk ? ".unk" : "" );
 
-    // Debug information about the source type
+    //Debug information about the source type since this is where my problem lies
     if (s.type == 0)
     {
         fprintf(fp, " // s.type = 0: this is an immediate value\n");
@@ -95,27 +95,26 @@ struct agx_src agx_decode_float_src(uint16_t packed)
 
 void agx_print_fadd_f32(FILE *fp, uint8_t *code)
 {
-    // Debug the raw bytes being processed
     fprintf(fp, "// Raw bytes: %02X %02X %02X %02X %02X %02X\n", 
             code[0], code[1], code[2], code[3], code[4], code[5]);
     
-    // Code pertaining to source 0
+    //SRC0
     fprintf(fp, "// SRC0 Bytes: [2]=0x%02X, [3]=0x%02X\n", code[2], code[3]);
     uint16_t src0_packed = (code[2] << 4) | (code[3] >> 4);
     fprintf(fp, "// SRC0 Packed: 0x%03X\n", src0_packed);
     
-    // Decode and print detailed information about source 0
+    //Debug SRC0
     struct agx_src src0 = agx_decode_float_src(src0_packed);
     fprintf(fp, "// SRC0 Decoded: type=%u, reg=%u, size32=%d, abs=%d, neg=%d, unk=%d\n",
             src0.type, src0.reg, src0.size32, src0.abs, src0.neg, src0.unk);
     agx_print_src(fp, src0);
 
-    // Code pertaining to source 1
+    //SRC1
     fprintf(fp, "// SRC1 Bytes: [3]=0x%02X, [4]=0x%02X\n", code[3], code[4]);
     uint16_t src1_packed = ((code[3] & 0xF) << 8) | code[4];
     fprintf(fp, "// SRC1 Packed: 0x%03X\n", src1_packed);
     
-    // Decode and print detailed information about source 1
+    //Debug SRC1
     struct agx_src src1 = agx_decode_float_src(src1_packed);
     fprintf(fp, "// SRC1 Decoded: type=%u, reg=%u, size32=%d, abs=%d, neg=%d, unk=%d\n",
             src1.type, src1.reg, src1.size32, src1.abs, src1.neg, src1.unk);

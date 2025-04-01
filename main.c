@@ -6,7 +6,6 @@
 #include "render.h"
 #include "armOpCodes.h"
 
-// Global variables using your original naming
 static Framebuffer* fb = NULL;
 static int kq = -1;
 static struct kevent change;
