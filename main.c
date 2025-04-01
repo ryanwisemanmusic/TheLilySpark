@@ -25,11 +25,15 @@ static Pixel black = {0, 0, 0};
 */
 uint8_t test_code[16] = 
 {
-    0xAA, 0x81, // We begin with Opcode at 0xAA. Then we add dest (w0) to it
-    //On source 0, we need us to store a constant at value 5
-    0x50, 0xA0, //Source 0: type=2 (const_), reg=5, flags=0
-    //On source 1, we need us to store a constant at value 10
-    0x0A, 0x00, //Source 1: type=2 (const_), reg=10, flags=0
+    /*
+    Some important notes, 0x85 is byte 2 and 0x08 is byte 3
+    As a reminder, the 0x08 byte is shared, meaning that byte 4 must be
+    something that accounts for the shared byte of 3 in order for floating
+    point to work.
+    */
+    0xAA, 0x81,
+    0x85, 0x08,
+    0xA0, 0xA0,
     0x96, 0x02, 
     0x45, 0x36, 
     0x27, 0x00, 

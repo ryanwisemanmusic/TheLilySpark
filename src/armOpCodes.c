@@ -95,27 +95,29 @@ struct agx_src agx_decode_float_src(uint16_t packed)
 
 void agx_print_fadd_f32(FILE *fp, uint8_t *code)
 {
-    //Debug the raw bytes being processed
+    // Debug the raw bytes being processed
     fprintf(fp, "// Raw bytes: %02X %02X %02X %02X %02X %02X\n", 
             code[0], code[1], code[2], code[3], code[4], code[5]);
     
-    //Code pertaining to source 0
+    // Code pertaining to source 0
+    fprintf(fp, "// SRC0 Bytes: [2]=0x%02X, [3]=0x%02X\n", code[2], code[3]);
     uint16_t src0_packed = (code[2] << 4) | (code[3] >> 4);
-    fprintf(fp, "// src0_packed: 0x%04X\n", src0_packed);
+    fprintf(fp, "// SRC0 Packed: 0x%03X\n", src0_packed);
     
-    //then print the decoded float result of src0_packed
+    // Decode and print detailed information about source 0
     struct agx_src src0 = agx_decode_float_src(src0_packed);
-    fprintf(fp, "// src0 decoded: type=%u, reg=%u, size32=%d, abs=%d, neg=%d, unk=%u\n",
+    fprintf(fp, "// SRC0 Decoded: type=%u, reg=%u, size32=%d, abs=%d, neg=%d, unk=%d\n",
             src0.type, src0.reg, src0.size32, src0.abs, src0.neg, src0.unk);
     agx_print_src(fp, src0);
 
-    //Code pertaining to source 1
+    // Code pertaining to source 1
+    fprintf(fp, "// SRC1 Bytes: [3]=0x%02X, [4]=0x%02X\n", code[3], code[4]);
     uint16_t src1_packed = ((code[3] & 0xF) << 8) | code[4];
-    fprintf(fp, "// src1_packed: 0x%04X\n", src1_packed);
+    fprintf(fp, "// SRC1 Packed: 0x%03X\n", src1_packed);
     
-    //Print then what is in src1_packed
+    // Decode and print detailed information about source 1
     struct agx_src src1 = agx_decode_float_src(src1_packed);
-    fprintf(fp, "// src1 decoded: type=%u, reg=%u, size32=%d, abs=%d, neg=%d, unk=%u\n",
+    fprintf(fp, "// SRC1 Decoded: type=%u, reg=%u, size32=%d, abs=%d, neg=%d, unk=%d\n",
             src1.type, src1.reg, src1.size32, src1.abs, src1.neg, src1.unk);
     agx_print_src(fp, src1);
 
