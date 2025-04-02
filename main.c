@@ -196,7 +196,7 @@ void cleanup_system(void)
     }
 }
 
-// Main function that uses the modular components
+//Main function that uses the modular components
 int main(void)
 {
     if (init_system() != 0) {
