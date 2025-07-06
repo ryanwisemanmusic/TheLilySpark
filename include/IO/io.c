@@ -21,7 +21,7 @@ agx_alloc_mem(osport connection, size_t size)
 	uint64_t out[10] = { 0 };
 	size_t out_sz = sizeof(out);
 
-	sys_return_t ret = IOConnectCallMethod(connection,
+	sys_return_t ret = IO_Call_Invoke(connection,
 			AGX_SELECTOR_ALLOCATE_MEM, NULL, 0, args_in,
 			sizeof(args_in), NULL, 0, out, &out_sz);
 
@@ -48,7 +48,7 @@ agx_alloc_cmdbuf(osport connection, size_t size, bool cmdbuf)
 		cmdbuf ? 1 : 0
 	};
 
-	sys_return_t ret = IOConnectCallMethod(connection,
+	sys_return_t ret = IO_Call_Invoke(connection,
 			AGX_SELECTOR_CREATE_CMDBUF, inputs, 2, NULL, 0, NULL,
 			NULL, &out, &out_sz);
 
