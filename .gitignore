@@ -55,3 +55,5 @@ my_program
 *.ppm
 *.txt
 /CODE FOR REFERENCE ONLY
+clang_preproc.log
+clang_preproc2.log
