@@ -10,7 +10,7 @@ CFLAGS = -Wall -Wextra -std=c17 -g \
 # Add framework linking for CoreFoundation and IOKit
 LDFLAGS = -framework CoreFoundation -framework IOKit
 
-SRC = main.c src/framebuffer.c src/render.c src/armOpCodes.c include/io/io.c 
+SRC = main.c src/framebuffer.c src/render.c src/armOpCodes.c include/io/io.c src/sysprobe.c src/macho_probe.c src/window_probe.c src/graphics_bruteforce.c
 OBJ = $(SRC:.c=.o)
 TARGET = my_program
 
