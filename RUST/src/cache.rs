@@ -90,3 +90,39 @@ pub fn get_l1_cache_set_m1(addr: u64) -> u64 {
 pub fn get_cache_offset_m1(addr: u64) -> u64 {
     return addr & 0x7F;
 }
+
+#[no_mangle]
+pub extern "C" fn get_cache_tag_generic(addr: u64) -> u64
+{
+    get_cache_tag_internal(addr)
+}
+
+#[no_mangle]
+pub extern "C" fn get_cache_set_generic(addr: u64) -> u64
+{
+    get_cache_set_internal(addr)
+}
+
+#[no_mangle]
+pub extern "C" fn get_cache_offset_generic(addr: u64) -> u64
+{
+    get_cache_offset_internal(addr)
+}
+
+#[no_mangle]
+pub extern "C" fn get_cache_set_m1(addr: u64) -> u64
+{
+    (addr >> 7) & 0xFFFF
+}
+
+#[no_mangle]
+pub extern "C" fn get_l1_cache_set_m1(addr: u64) -> u64
+{
+    (addr >> 6) & 0x1FF
+}
+
+#[no_mangle]
+pub extern "C" fn get_cache_offset_m1(addr: u64) -> u64
+{
+    addr & 0x7F
+}
