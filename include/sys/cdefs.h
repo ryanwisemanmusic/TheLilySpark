@@ -67,6 +67,10 @@
 #ifndef _CDEFS_H_
 #define _CDEFS_H_
 
+#ifndef __kernel_ptr_semantics
+#define __kernel_ptr_semantics
+#endif
+
 #if defined(__cplusplus)
 #define __BEGIN_DECLS   extern "C" {
 #define __END_DECLS     }
