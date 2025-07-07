@@ -12,8 +12,6 @@ own.
 
 #include "systypes.h"
 
-#include <IOKit/IOKitLib.h>
-
 enum agx_alloc_type
 {
     AGX_ALLOC_REGULAR = 0,

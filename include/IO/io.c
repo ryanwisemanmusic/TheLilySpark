@@ -2,6 +2,7 @@
 #include "io.h"
 #include "selectors.h"
 #include "systypes.h"
+#include <IOKit/IOKitLib.h>
 
 struct agx_allocation
 agx_alloc_mem(osport connection, size_t size)
