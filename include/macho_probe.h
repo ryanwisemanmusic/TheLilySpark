@@ -20,6 +20,9 @@ For more info, consult: https://blog.efiens.com/post/luibo/osx/macho/
 #include <stdio.h>
 #include <stdint.h>
 
+// Print Mach-O header info for a file
+void macho_print_info(const char *path, FILE *log);
+
 //We print the Macho-O header into a file here
 void print_macho_header(const char *path, FILE *log);
 
