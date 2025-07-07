@@ -23,3 +23,9 @@ Framebuffer* fb_create(int width, int height);
 void fb_destroy (Framebuffer* fb);
 
 void fb_save_ppm(const Framebuffer* fb, const char* filename);
+
+// Save framebuffer as text or ASCII-art
+void fb_save_txt(const Framebuffer* fb, const char* filename, int ascii_art);
+
+// Save framebuffer as CSV
+void fb_save_csv(const Framebuffer* fb, const char* filename);
