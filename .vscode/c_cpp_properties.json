@@ -10,7 +10,12 @@
                 "${workspaceFolder}/include/sys",
                 "${workspaceFolder}/include/IO",
                 "${workspaceFolder}/sysheaders",
-                "${workspaceFolder}/src"
+                "${workspaceFolder}/src",
+                "/Library/Developer/CommandLineTools/usr/include",
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include",
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/System/Library/Frameworks",
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/System/Library/Frameworks/Kernel.framework/Versions/A/Headers",
+                "${workspaceFolder}/include/sys"
             ],
             "defines": [],
             "macFrameworkPath": [
