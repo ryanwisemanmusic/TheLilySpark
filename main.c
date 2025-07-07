@@ -10,6 +10,10 @@
 #include "window_probe.h"
 #include "graphics_bruteforce.h"
 
+#ifndef __kernel_ptr_semantics
+#define __kernel_ptr_semantics
+#endif
+
 /*
 TODO: Document this section extensively.
 */
