@@ -25,4 +25,4 @@ typedef kern_return_t sys_return_t;
 typedef __SIZE_TYPE__ size_t;
 #endif
 
-#endif /* _SYS_TYPES_H_ */
+#endif 
