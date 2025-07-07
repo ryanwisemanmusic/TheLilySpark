@@ -53,3 +53,5 @@ dkms.conf
 my_program
 .DS_Store
 *.ppm
+*.txt
+/CODE FOR REFERENCE ONLY
