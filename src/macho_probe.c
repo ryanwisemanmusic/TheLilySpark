@@ -422,3 +422,4 @@ void macho_scan_agx(const char *dir, FILE *log)
 {
     sysprobe_recursive_dir(dir, agx_cb, log, 0);
 }
+

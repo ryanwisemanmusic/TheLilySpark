@@ -1,3 +1,6 @@
+#ifndef SELECTORS_H
+#define SELECTORS_H
+
 #include <stdint.h>
 
 enum agx_selector 
@@ -74,3 +77,5 @@ struct agx_create_cmdbuf_resp
     uint32_t size;
     uint32_t id;
 } __attribute__((packed));
+
+#endif

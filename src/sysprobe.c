@@ -14,10 +14,6 @@
 #include <IOKit/IOKitLib.h>
 #include <glob.h>
 
-/*
-TODO: Document this section extensively.
-*/
-
 static jmp_buf jmpbuf;
 static volatile sig_atomic_t faulted = 0;
 

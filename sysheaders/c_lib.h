@@ -7,5 +7,3 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <pthread.h>
-
-#include <sys/event.h>

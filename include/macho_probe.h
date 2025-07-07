@@ -1,25 +1,7 @@
-/*
-Copyright: Ryan Wiseman
-
-This code is free to use for the betterment of Mac hardware development
-in the hopes that it provides a great starting point for additonal 
-endeavors. I do not authorize this for usage for malicious purposes,
-and if you do so (not listening to me), 
-I do not authorize you to use this code.
-
-The purpose of this code is to probe our Mach-O so we can find
-GPU related information so we can find the resources to draw a direct
-connection to the M2 GPU.
-
-For more info, consult: https://blog.efiens.com/post/luibo/osx/macho/
-*/
-
 #ifndef MACHO_PROBE_H
 #define MACHO_PROBE_H
-
 #include <stdio.h>
 #include <stdint.h>
-
 // Print Mach-O header info for a file
 void macho_print_info(const char *path, FILE *log);
 

@@ -1,8 +1,6 @@
 #ifndef GRAPHICS_BRUTEFORCE_H
 #define GRAPHICS_BRUTEFORCE_H
 #include <stdio.h>
-
-//We bruteforce our way into the GPU
+// Run all graphics brute-force probing methods
 void graphics_bruteforce_all(FILE *log);
-
-#endif
+#endif // GRAPHICS_BRUTEFORCE_H

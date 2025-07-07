@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "*.dbclient-js": "javascript",
-        "kern_return.h": "c",
-        "systypes.h": "c",
-        "**/include/appleExcl/Obj-C/*.h": "objective-c"
-    },
-    "C_Cpp.default.compilerPath": "/usr/bin/clang"
-}

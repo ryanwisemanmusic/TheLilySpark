@@ -1,4 +1,4 @@
-#include "sysheaders/c_lib.h"
+#include "c_lib.h"
 #include "mach_lib.h"
 #include "net_lib.h"
 #include "syscall.h"
@@ -9,10 +9,6 @@
 #include "macho_probe.h"
 #include "window_probe.h"
 #include "graphics_bruteforce.h"
-
-#ifndef __kernel_ptr_semantics
-#define __kernel_ptr_semantics
-#endif
 
 /*
 TODO: Document this section extensively.

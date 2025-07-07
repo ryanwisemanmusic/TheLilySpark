@@ -1,6 +1,7 @@
 #ifndef WINDOW_PROBE_H
 #define WINDOW_PROBE_H
 #include <stdio.h>
+
 //Generate window attempt
 int window_probe_attempt(const char *device, int width, int height, FILE *log);
 
