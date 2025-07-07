@@ -1,26 +1,59 @@
 {
-    "configurations": [
-        {
-            "name": "Mac",
-            "includePath": [
-                "${default}",
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/sysheaders",
-                "/Library/Developer/CommandLineTools/usr/include",
-                "/Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include",
-                "/Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/System/Library/Frameworks",
-                "/Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/System/Library/Frameworks/Kernel.framework/Versions/A/Headers",
-                "${workspaceFolder}/include/sys"
-            ],
-            "macFrameworkPath": [
-                "/Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/System/Library/Frameworks"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/clang",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-arm64"
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "Mac",
+      "includePath": [
+        "${default}",
+        "${workspaceFolder}",
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/include/sys",
+        "${workspaceFolder}/include/IO",
+        "${workspaceFolder}/sysheaders",
+        "${workspaceFolder}/include/appleExcl",
+        "${workspaceFolder}/include/appleExcl/Obj-C",
+        "${workspaceFolder}/src",
+        "/Library/Developer/CommandLineTools/usr/include",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include"
+      ],
+      "macFrameworkPath": [
+        "/System/Library/Frameworks",
+        "/Library/Frameworks"
+      ],
+      "defines": [
+        "__BLOCKS__",
+        "__DARWIN_UNIX03"
+      ],
+      "compilerPath": "/usr/bin/clang",
+      "cStandard": "c17",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "macos-clang-arm64",
+      "configurationProvider": "ms-vscode.makefile-tools",
+
+      // 🟡 Keep these only if you’re editing primarily Obj-C code
+      "compilerArgs": [
+        "-x", "objective-c",
+        "-fblocks",
+        "-fobjc-arc",              // (Optional) if using ARC
+        "-isysroot", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+      ],
+
+      // ✅ Ensure this includes actual Obj-C definitions if necessary
+      "forcedInclude": [
+        "${workspaceFolder}/include/appleExcl/Obj-C/baseObjC.h"
+      ],
+
+      "browse": {
+        "path": [
+          "${workspaceFolder}/include",
+          "${workspaceFolder}/include/appleExcl/Obj-C",
+          "${workspaceFolder}/sysheaders",
+          "/Library/Developer/CommandLineTools/usr/include",
+          "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include"
+        ],
+        "limitSymbolsToIncludedHeaders": true,
+        "databaseFilename": ""
+      }
+    }
+  ],
+  "version": 4
 }
