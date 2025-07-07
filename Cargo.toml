@@ -1,0 +1,3 @@
+[lib]
+name = "attack"
+crate-type = ["staticlib"]
